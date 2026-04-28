@@ -1,0 +1,13 @@
+# .NET
+bin/
+obj/
+
+# VS Code
+.vscode/
+.agent/
+
+# Logs
+*.log
+
+# OS
+.DS_Store

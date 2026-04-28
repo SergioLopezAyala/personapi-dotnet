@@ -1,0 +1,17 @@
+{
+  "name": "dotnet-lab",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/lab",
+  "runServices": ["db", "app"],
+  "forwardPorts": [5000, 1433],
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}
