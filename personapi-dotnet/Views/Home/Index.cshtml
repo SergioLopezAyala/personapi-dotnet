@@ -1,0 +1,15 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+<div class="p-4 bg-light rounded">
+    <h1 class="display-5">PersonaAPI</h1>
+    <p class="lead">API REST y vistas MVC para gestionar personas, profesiones, estudios y teléfonos.</p>
+    <hr />
+    <p>
+        <a class="btn btn-primary"   asp-controller="Persona"   asp-action="Index">Personas</a>
+        <a class="btn btn-secondary" asp-controller="Profesion" asp-action="Index">Profesiones</a>
+        <a class="btn btn-secondary" asp-controller="Estudios"  asp-action="Index">Estudios</a>
+        <a class="btn btn-secondary" asp-controller="Telefono"  asp-action="Index">Teléfonos</a>
+        <a class="btn btn-outline-dark" href="/swagger" target="_blank">Swagger</a>
+    </p>
+</div>

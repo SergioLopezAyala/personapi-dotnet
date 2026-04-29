@@ -1,0 +1,36 @@
+@model personapi_dotnet.Models.Entities.Estudios
+@{
+    ViewData["Title"] = "Crear estudio";
+}
+<h1>Crear estudio</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="IdProf" class="form-label"></label>
+                <input asp-for="IdProf" class="form-control" />
+                <span asp-validation-for="IdProf" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CcPer" class="form-label"></label>
+                <input asp-for="CcPer" class="form-control" />
+                <span asp-validation-for="CcPer" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Fecha" class="form-label"></label>
+                <input asp-for="Fecha" type="date" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Univer" class="form-label"></label>
+                <input asp-for="Univer" class="form-control" />
+                <span asp-validation-for="Univer" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+        </form>
+    </div>
+</div>
+@section Scripts { @await Html.PartialAsync("_ValidationScriptsPartial") }
