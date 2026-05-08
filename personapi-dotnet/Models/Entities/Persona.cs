@@ -8,6 +8,7 @@ public class Persona
 {
     [Key]
     [Column("cc")]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [Display(Name = "Cédula")]
     public long Cc { get; set; }
 

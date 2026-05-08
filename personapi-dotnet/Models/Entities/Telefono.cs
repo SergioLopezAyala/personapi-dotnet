@@ -19,8 +19,9 @@ public class Telefono
 
     [Column("duenio")]
     [Display(Name = "Dueño (cédula)")]
-    public long? Duenio { get; set; }
+    [Required]
+    public long Duenio { get; set; }
 
     [ForeignKey(nameof(Duenio))]
-    public virtual Persona? Persona { get; set; }
+    public virtual Persona Persona { get; set; } = null!;
 }
