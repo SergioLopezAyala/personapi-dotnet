@@ -4,7 +4,7 @@
 
 ### Opción 1: Ver en línea
 - **Repositorio**: https://github.com/SergioLopezAyala/personapi-dotnet
-- **Release**: https://github.com/SergioLopezAyala/personapi-dotnet/releases/tag/v1.0.0
+- **Release**: https://github.com/SergioLopezAyala/personapi-dotnet/releases/tag/v1.0.1
 
 ### Opción 2: Ejecutar localmente (Docker)
 
