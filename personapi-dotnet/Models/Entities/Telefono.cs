@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace personapi_dotnet.Models.Entities;
 
@@ -23,5 +24,6 @@ public class Telefono
     public long Duenio { get; set; }
 
     [ForeignKey(nameof(Duenio))]
+    [JsonIgnore]
     public virtual Persona Persona { get; set; } = null!;
 }
