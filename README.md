@@ -1,6 +1,6 @@
 # personapi-dotnet
 
-## 🚀 Despliegue (Para el Profesor)
+## 🚀 Despliegue 
 
 ### Opción 1: Ver en línea
 - **Repositorio**: https://github.com/SergioLopezAyala/personapi-dotnet
