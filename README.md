@@ -104,30 +104,33 @@ sqlcmd -S db -U sa -P 'Admin123!' -i personapi-dotnet/Database/dml.sql
 ### Relaciones (diagrama entidad-relación)
 
 ```
-┌─────────────┐       ┌─────────────┐
-│  profesion  │       │   persona   │
-│─────────────│       │─────────────│
-│ PK id (AI)  │       │ PK cc       │
-│ nom         │       │ nombre      │
-│ des         │       │ apellido    │
-└──────┬──────┘       │ genero      │
-       │              │ edad        │
-       │ 1:N          └──────┬──────┘
-       │                     │
-       ▼                     │
-┌─────────────┐       ┌──────┴──────┐
-│  estudios   │       │  telefono   │
-│─────────────│       │─────────────│
-│ PK id_prof  │◄──FK  │ PK num      │
-│ PK cc_per   │◄──FK  │ oper        │
-│ fecha       │       │ FK duenio ──┼──► NOT NULL
-│ univer      │       └─────────────┘
-└─────────────┘
+┌─────────────┐       ┌─────────────────────────────┐       ┌─────────────┐
+│  profesion  │       │         estudios            │       │   persona   │
+│─────────────│       │───────────── ───────────────│       │─────────────│
+│ PK id (AI)  │◄──────│ FK id_prof (PK parte 1)    │       │ PK cc       │
+│ nom         │  1:N  │ FK cc_per  (PK parte 2)    │───────│ nombre      │
+│ des         │       │ fecha                      │  N:1  │ apellido    │
+└─────────────┘       │ univer                     │       │ genero      │
+                      └─────────────────────────────┘       │ edad        │
+                               │                             └──────┬──────┘
+                               │ 1:N                                 │
+                               ▼                                     ▼
+                      ┌─────────────┐                     ┌─────────────┐
+                      │  telefono   │                     │  telefono   │
+                      │─────────────│                     │─────────────│
+                      │ PK num      │                     │ PK num      │
+                      │ oper        │                     │ oper        │
+                      │ FK duenio ──┼──► NOT NULL         │ FK duenio ──┼──► NOT NULL
+                      └─────────────┘                     └─────────────┘
 ```
 
-- `profesion` **1 → N** `estudios` (cada profesión puede tener muchos estudios)
-- `persona` **1 → N** `estudios` (cada persona puede estudiar muchas profesiones)
-- `persona` **1 → N** `telefono` (cada persona tiene muchos teléfonos, FK obligatoria)
+**Resumen de relaciones:**
+- `profesion` **1 → N** `estudios` — cada profesión tiene muchos registros de estudios
+- `persona` **1 → N** `estudios` — cada persona tiene muchos registros de estudios
+- **N:M (many-to-many)** entre `profesion` y `persona` mediante la tabla `estudios` (tabla pivote/junction)
+- `persona` **1 → N** `telefono` — cada persona tiene muchos teléfonos (FK obligatoria)
+
+> **Nota**: El diagrama visual está disponible en [`.agents/schema.jpeg`](.agents/schema.jpeg)
 
 ### Auto-seeding
 
