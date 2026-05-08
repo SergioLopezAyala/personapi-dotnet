@@ -1,5 +1,35 @@
 # personapi-dotnet
 
+## 🚀 Despliegue (Para el Profesor)
+
+### Opción 1: Ver en línea
+- **Repositorio**: https://github.com/SergioLopezAyala/personapi-dotnet
+- **Release**: https://github.com/SergioLopezAyala/personapi-dotnet/releases/tag/v1.0.0
+
+### Opción 2: Ejecutar localmente (Docker)
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/SergioLopezAyala/personapi-dotnet.git
+cd personapi-dotnet
+
+# 2. Iniciar los servicios
+cd .devcontainer
+docker-compose up -d
+
+# 3. Esperar ~30 segundos a que SQL Server inicie
+
+# 4. La app estará disponible en:
+#   - HTTP:      http://localhost:5000
+#   - Swagger:   http://localhost:5000/swagger
+
+# Para detener: docker-compose down
+```
+
+**Credenciales SQL**: `sa` / `Admin123!`
+
+---
+
 ## Descripción
 
 Web API y aplicación MVC en **ASP.NET Core 7** con patrón **MVC + DAO (Repository Pattern)** que expone:
@@ -22,9 +52,20 @@ El entorno corre en Dev Containers con dos servicios: `app` (.NET) y `db` (SQL S
 
 ## Configuración del ambiente
 
-1. Abrir el repositorio en VS Code o Cursor.
-2. Ejecutar la acción **Reopen in Container**.
-3. Esperar a que se construyan los servicios `app` y `db`.
+### Opción A: Docker Compose (Recomendado)
+
+```bash
+cd .devcontainer
+docker-compose up -d
+```
+
+La app escucha en `http://localhost:5000` y la BD en `localhost:1433`.
+
+### Opción B: VS Code Dev Container
+
+1. Abrir el repositorio en VS Code.
+2. Ejecutar **Reopen in Container**.
+3. Esperar a que se construyan los servicios.
 
 Variables clave (definidas en `.devcontainer/docker-compose.yml`):
 
@@ -56,15 +97,46 @@ sqlcmd -S db -U sa -P 'Admin123!' -i personapi-dotnet/Database/dml.sql
 | Tabla | Columnas | PK |
 |---|---|---|
 | `profesion` | `id` (identity), `nom`, `des` | `id` |
-| `persona`   | `cc`, `nombre`, `apellido`, `genero` ('M'/'F'), `edad` | `cc` |
-| `estudios`  | `id_prof`, `cc_per`, `fecha`, `univer` | (`id_prof`, `cc_per`) |
-| `telefono`  | `num`, `oper`, `duenio` | `num` |
+| `persona`   | `cc` (PK), `nombre`, `apellido`, `genero` ('M'/'F'), `edad` | `cc` |
+| `estudios`  | `id_prof` (FK→profesion), `cc_per` (FK→persona), `fecha`, `univer` | (`id_prof`, `cc_per`) |
+| `telefono`  | `num` (PK), `oper`, `duenio` (FK→persona, NOT NULL) | `num` |
 
-Relaciones:
+### Relaciones (diagrama entidad-relación)
 
-- `profesion` 1 → N `estudios`
-- `persona`   1 → N `estudios`
-- `persona`   1 → 0..N `telefono`
+```
+┌─────────────┐       ┌─────────────┐
+│  profesion  │       │   persona   │
+│─────────────│       │─────────────│
+│ PK id (AI)  │       │ PK cc       │
+│ nom         │       │ nombre      │
+│ des         │       │ apellido    │
+└──────┬──────┘       │ genero      │
+       │              │ edad        │
+       │ 1:N          └──────┬──────┘
+       │                     │
+       ▼                     │
+┌─────────────┐       ┌──────┴──────┐
+│  estudios   │       │  telefono   │
+│─────────────│       │─────────────│
+│ PK id_prof  │◄──FK  │ PK num      │
+│ PK cc_per   │◄──FK  │ oper        │
+│ fecha       │       │ FK duenio ──┼──► NOT NULL
+│ univer      │       └─────────────┘
+└─────────────┘
+```
+
+- `profesion` **1 → N** `estudios` (cada profesión puede tener muchos estudios)
+- `persona` **1 → N** `estudios` (cada persona puede estudiar muchas profesiones)
+- `persona` **1 → N** `telefono` (cada persona tiene muchos teléfonos, FK obligatoria)
+
+### Auto-seeding
+
+Al iniciar la app, [`PersonaDbSeeder.cs`](personapi-dotnet/Models/Entities/PersonaDbSeeder.cs) sembrar automáticamente:
+
+- 5 profesiones (Ingeniero, Médico, Abogado, Arquitecto, Contador)
+- 5 personas (con cédulas 1001-1005)
+- 5 estudios (relacionando personas con profesiones)
+- 5 teléfonos (asociados a cada persona)
 
 ### Cadena de conexión
 
@@ -203,7 +275,8 @@ personapi-dotnet/
 │   │       ├── Profesion.cs
 │   │       ├── Estudios.cs                   ← PK compuesta
 │   │       ├── Telefono.cs
-│   │       └── PersonaDbContext.cs
+│   │       ├── PersonaDbContext.cs
+│   │       └── PersonaDbSeeder.cs            ← Auto-seed de datos
 │   ├── Repositories/
 │   │   ├── PersonaRepository.cs
 │   │   ├── ProfesionRepository.cs
