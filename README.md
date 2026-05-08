@@ -101,36 +101,12 @@ sqlcmd -S db -U sa -P 'Admin123!' -i personapi-dotnet/Database/dml.sql
 | `estudios`  | `id_prof` (FK→profesion), `cc_per` (FK→persona), `fecha`, `univer` | (`id_prof`, `cc_per`) |
 | `telefono`  | `num` (PK), `oper`, `duenio` (FK→persona, NOT NULL) | `num` |
 
-### Relaciones (diagrama entidad-relación)
+### Relaciones
 
-```
-┌─────────────┐       ┌─────────────────────────────┐       ┌─────────────┐
-│  profesion  │       │         estudios            │       │   persona   │
-│─────────────│       │───────────── ───────────────│       │─────────────│
-│ PK id (AI)  │◄──────│ FK id_prof (PK parte 1)    │       │ PK cc       │
-│ nom         │  1:N  │ FK cc_per  (PK parte 2)    │───────│ nombre      │
-│ des         │       │ fecha                      │  N:1  │ apellido    │
-└─────────────┘       │ univer                     │       │ genero      │
-                      └─────────────────────────────┘       │ edad        │
-                               │                             └──────┬──────┘
-                               │ 1:N                                 │
-                               ▼                                     ▼
-                      ┌─────────────┐                     ┌─────────────┐
-                      │  telefono   │                     │  telefono   │
-                      │─────────────│                     │─────────────│
-                      │ PK num      │                     │ PK num      │
-                      │ oper        │                     │ oper        │
-                      │ FK duenio ──┼──► NOT NULL         │ FK duenio ──┼──► NOT NULL
-                      └─────────────┘                     └─────────────┘
-```
-
-**Resumen de relaciones:**
-- `profesion` **1 → N** `estudios` — cada profesión tiene muchos registros de estudios
-- `persona` **1 → N** `estudios` — cada persona tiene muchos registros de estudios
-- **N:M (many-to-many)** entre `profesion` y `persona` mediante la tabla `estudios` (tabla pivote/junction)
-- `persona` **1 → N** `telefono` — cada persona tiene muchos teléfonos (FK obligatoria)
-
-> **Nota**: El diagrama visual está disponible en [`.agents/schema.jpeg`](.agents/schema.jpeg)
+- **N:M (muchos a muchos)** entre `profesion` y `persona` mediante la tabla **estudios** (tabla pivote/junction):
+  - `profesion` **1 → N** `estudios`
+  - `persona` **1 → N** `estudios`
+- `persona` **1 → N** `telefono` — cada persona tiene muchos teléfonos (FK `duenio` es obligatoria, NOT NULL)
 
 ### Auto-seeding
 
