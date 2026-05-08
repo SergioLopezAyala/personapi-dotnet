@@ -31,7 +31,7 @@ public class ProfesionRepository : IProfesionRepository
 
     public async Task UpdateAsync(Profesion entity)
     {
-        _context.Profesiones.Update(entity);
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
@@ -45,6 +45,6 @@ public class ProfesionRepository : IProfesionRepository
 
     public async Task<bool> ExistsAsync(params object[] keyValues)
     {
-        return await _context.Profesiones.FindAsync(keyValues) is not null;
+        return await _context.Profesiones.AsNoTracking().AnyAsync(p => p.Id == (int)keyValues[0]);
     }
 }

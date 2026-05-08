@@ -25,5 +25,5 @@ public class Telefono
 
     [ForeignKey(nameof(Duenio))]
     [JsonIgnore]
-    public virtual Persona Persona { get; set; } = null!;
+    public virtual Persona? Persona { get; set; }
 }

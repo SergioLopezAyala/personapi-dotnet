@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace personapi_dotnet.Models.Entities;
 
@@ -25,8 +26,10 @@ public class Estudios
     public string? Univer { get; set; }
 
     [ForeignKey(nameof(IdProf))]
+    [JsonIgnore]
     public virtual Profesion? Profesion { get; set; }
 
     [ForeignKey(nameof(CcPer))]
+    [JsonIgnore]
     public virtual Persona? Persona { get; set; }
 }

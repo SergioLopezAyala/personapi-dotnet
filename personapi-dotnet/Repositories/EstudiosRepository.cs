@@ -40,7 +40,7 @@ public class EstudiosRepository : IEstudiosRepository
 
     public async Task UpdateAsync(Estudios entity)
     {
-        _context.Estudios.Update(entity);
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
@@ -59,6 +59,8 @@ public class EstudiosRepository : IEstudiosRepository
 
     public async Task<bool> ExistsAsync(params object[] keyValues)
     {
-        return await _context.Estudios.FindAsync(keyValues) is not null;
+        int idProf = (int)keyValues[0];
+        long ccPer = (long)keyValues[1];
+        return await _context.Estudios.AsNoTracking().AnyAsync(e => e.IdProf == idProf && e.CcPer == ccPer);
     }
 }

@@ -33,7 +33,7 @@ public class PersonaRepository : IPersonaRepository
 
     public async Task UpdateAsync(Persona entity)
     {
-        _context.Personas.Update(entity);
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
@@ -47,6 +47,6 @@ public class PersonaRepository : IPersonaRepository
 
     public async Task<bool> ExistsAsync(params object[] keyValues)
     {
-        return await _context.Personas.FindAsync(keyValues) is not null;
+        return await _context.Personas.AsNoTracking().AnyAsync(p => p.Cc == (long)keyValues[0]);
     }
 }

@@ -36,7 +36,7 @@ public class TelefonoRepository : ITelefonoRepository
 
     public async Task UpdateAsync(Telefono entity)
     {
-        _context.Telefonos.Update(entity);
+        _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
@@ -50,6 +50,6 @@ public class TelefonoRepository : ITelefonoRepository
 
     public async Task<bool> ExistsAsync(params object[] keyValues)
     {
-        return await _context.Telefonos.FindAsync(keyValues) is not null;
+        return await _context.Telefonos.AsNoTracking().AnyAsync(t => t.Num == (string)keyValues[0]);
     }
 }
