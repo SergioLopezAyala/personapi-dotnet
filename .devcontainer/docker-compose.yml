@@ -10,6 +10,8 @@ services:
       - nuget-packages:/root/.nuget/packages
     working_dir: /workspaces/lab
     command: sleep infinity
+    ports:
+      - "5000:5000"
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - DOTNET_CLI_TELEMETRY_OPTOUT=1

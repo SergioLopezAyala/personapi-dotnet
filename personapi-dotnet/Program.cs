@@ -33,6 +33,21 @@ builder.Services.AddScoped<ITelefonoRepository, TelefonoRepository>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<PersonaDbContext>();
+    if (db.Database.GetMigrations().Any())
+    {
+        db.Database.Migrate();
+    }
+    else
+    {
+        db.Database.EnsureCreated();
+    }
+
+    PersonaDbSeeder.Seed(db);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

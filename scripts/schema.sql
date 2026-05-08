@@ -16,6 +16,9 @@ BEGIN
 END
 GO
 
+ALTER AUTHORIZATION ON DATABASE::persona_db TO sa;
+GO
+
 USE persona_db;
 GO
 

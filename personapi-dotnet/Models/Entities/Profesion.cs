@@ -8,7 +8,6 @@ public class Profesion
 {
     [Key]
     [Column("id")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Display(Name = "Id")]
     public int Id { get; set; }
 

@@ -31,25 +31,24 @@ Variables clave (definidas en `.devcontainer/docker-compose.yml`):
 | Variable | Valor |
 |---|---|
 | Host SQL desde `app` | `db:1433` |
-| Usuario SA           | `sa` (uso interno por `init-db.sh`) |
-| Usuario aplicación   | `admin` / `Admin123!` |
+| Usuario SQL          | `sa` / `Admin123!` |
 | URL API              | `http://localhost:5000` |
 
 ---
 
 ## Configuración de la base de datos
 
-La base se llama **`persona_db`** y se inicializa automáticamente con los scripts en [`scripts/schema.sql`](scripts/schema.sql) y [`scripts/seed.sql`](scripts/seed.sql) cada vez que arranca el contenedor `db`.
+La base se llama **`persona_db`** y se crea/actualiza automáticamente al iniciar la app. El arranque aplica migraciones si existen, o crea el esquema desde el modelo y luego **siembra datos con EF Core**.
 
-Para correrlo manualmente o para entornos externos al Dev Container, los scripts equivalentes están en [`personapi-dotnet/Database/ddl.sql`](personapi-dotnet/Database/ddl.sql) y [`personapi-dotnet/Database/dml.sql`](personapi-dotnet/Database/dml.sql).
+Los scripts en [`scripts/schema.sql`](scripts/schema.sql) y [`scripts/seed.sql`](scripts/seed.sql) quedan como referencia o para uso manual. Para entornos fuera del Dev Container, existen los scripts equivalentes en [`personapi-dotnet/Database/ddl.sql`](personapi-dotnet/Database/ddl.sql) y [`personapi-dotnet/Database/dml.sql`](personapi-dotnet/Database/dml.sql).
 
 ### Ejecutar los scripts manualmente
 
 Desde el contenedor `app`:
 
 ```bash
-sqlcmd -S db -U admin -P 'Admin123!' -i personapi-dotnet/Database/ddl.sql
-sqlcmd -S db -U admin -P 'Admin123!' -i personapi-dotnet/Database/dml.sql
+sqlcmd -S db -U sa -P 'Admin123!' -i personapi-dotnet/Database/ddl.sql
+sqlcmd -S db -U sa -P 'Admin123!' -i personapi-dotnet/Database/dml.sql
 ```
 
 ### Modelo
@@ -73,9 +72,26 @@ Relaciones:
 
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=db;Database=persona_db;User Id=admin;Password=Admin123!;TrustServerCertificate=True"
+  "DefaultConnection": "Server=db;Database=persona_db;User Id=sa;Password=Admin123!;TrustServerCertificate=True"
 }
 ```
+
+### Migraciones
+
+Si deseas generar migraciones, crea la inicial desde la raíz del repo:
+
+```bash
+dotnet ef migrations add InitialCreate -p personapi-dotnet
+dotnet ef database update -p personapi-dotnet
+```
+
+Si no tienes `dotnet-ef` instalado:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+
+En el arranque, la app aplica automáticamente las migraciones pendientes.
 
 ---
 

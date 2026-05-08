@@ -17,8 +17,6 @@ if [[ "${listo:-no}" != "si" ]]; then
   exit 1
 fi
 
-echo "Ejecutando scripts de base de datos..."
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -i /scripts/schema.sql
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -i /scripts/seed.sql
+echo "SQL Server listo."
 
 wait

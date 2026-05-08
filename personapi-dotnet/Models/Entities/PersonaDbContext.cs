@@ -38,7 +38,7 @@ public class PersonaDbContext : DbContext
             .HasOne(t => t.Persona)
             .WithMany(p => p.Telefonos)
             .HasForeignKey(t => t.Duenio)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Telefono>()
             .HasIndex(t => t.Duenio)
